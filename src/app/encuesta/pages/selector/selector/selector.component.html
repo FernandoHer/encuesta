@@ -1,0 +1,55 @@
+<h1 class="mt-5">Selector de Encuestador</h1>
+<hr>
+
+<form   [formGroup]="miFormulario"
+        (submit)="guardar()">
+    <!-- Selecciona tipo de encuesta -->
+
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label" >Estado</label>
+            <select class="form-control"
+                    formControlName="tipoEvaluacion" >
+                <option value="">Selecciona</option>
+                <option *ngFor="let evalua of tipoEvaluacion">
+                    {{evalua}}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Selecciona persona -->
+
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label">Escoge la persona a ser evaluada</label>
+            <select class="form-control"
+                    formControlName="nombreEvaluado">
+                <option value="">Selecciona la persona</option>
+                <option *ngFor="let evaluado of nombreEvaluado"
+                        [value]="evaluado">{{evaluado}}</option>
+            </select>
+
+        </div>
+    </div>
+
+
+    
+</form>
+
+
+<div class="row">
+    <div class="col">
+        <button type="submit"
+                (click)="guardar()"
+                class="btn btn-primary float-end">
+            Enviar Formulario
+        </button>
+    </div>
+</div>
+
+
+<h3>Valid:</h3>
+<pre>{{miFormulario.valid}}</pre>
+<h3>Valor:</h3>
+<pre>{{miFormulario.value|json}}</pre>
