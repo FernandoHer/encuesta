@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-selector',
@@ -12,13 +12,28 @@ export class SelectorComponent implements OnInit {
   miFormulario:FormGroup = this.fb.group(
     {
       tipoEvaluacion: ['',Validators.required],
-      nombreEvaluado: ['',Validators.required],
-      respuesta: ['', Validators.required]
+      nombreEvaluador: ['',Validators.required],
+      personasAEvaluar: this.fb.array ([
+      ['Juan Perez',[ Validators.required,Validators.minLength(3)]],
+      ['Anita Corozo',[ Validators.required,Validators.minLength(3)]],
+      ['Tamara Gomez',[ Validators.required,Validators.minLength(3)]],
+      ['Katty Megrano',[ Validators.required,Validators.minLength(3)]],
+      ['Mario Fuentes',[ Validators.required,Validators.minLength(3)]]
+        
+      ])
     }
   )
   
   tipoEvaluacion:string[] =[];
-  nombreEvaluado:string[] =[];
+  personasAEvaluar:string[] =[];
+  nombreEvaluador:string[] =[];
+  nuevoPersonasAEvaluar: FormControl =this.fb.control('',Validators.required);
+
+  get personasAEvaluarArr(){
+    return this.miFormulario.get('personasAEvaluar') as FormArray;
+  }
+
+
   index:number = 0
 
 
@@ -31,13 +46,27 @@ export class SelectorComponent implements OnInit {
       'Auto Evaluacion', 'Evaluar un Profesor', 'Evaluar un Directivo'
     ];
 
-    // codigo del Alunmo la primera posicion
-    this.nombreEvaluado =[
-      'A1','Carlos Perez','Juan Alvarez', 'Ricardo Zapata'
+    // Persona a Evaluar
+    this.nombreEvaluador =[
+      'Carlos Perez','Juan Alvarez', 'Ricardo Zapata'
     ];
-   
+
+  
   }
 
+  agregarFavorito(){
+    if(this.nuevoPersonasAEvaluar.invalid){
+      return;
+    }
+    // this.favoritosArr.push(new FormControl(this.nuevoFavorito.value,[Validators.required,Validators.minLength(3)]));
+    this.personasAEvaluarArr.push(this.fb.control(this.nuevoPersonasAEvaluar.value,[Validators.required,Validators.minLength(3)]));
+    this.nuevoPersonasAEvaluar.reset();
+  }
+
+  borrar(index:number){
+    console.log(this.miFormulario.controls['personasAEvaluar'].value[index]);
+    this.personasAEvaluarArr.removeAt(index);
+  };
   
 
   guardar(){
