@@ -11,7 +11,8 @@
             <select class="form-control"
                     formControlName="tipoEvaluacion" >
                 <option value="">Selecciona</option>
-                <option *ngFor="let evalua of tipoEvaluacion">
+                <option *ngFor="let evalua of tipoEvaluacion1"
+                        [value]="evalua">
                     {{evalua}}
                 </option>
             </select>
@@ -26,23 +27,24 @@
             <select class="form-control"
                     formControlName="nombreEvaluador">
                 <option value="">Selecciona la persona</option>
-                <option *ngFor="let evaluado of nombreEvaluador"
+                <option *ngFor="let evaluado of nombreEvaluador1"
                         [value]="evaluado">{{evaluado}}</option>
             </select>
-
         </div>
     </div>
 
     <!-- Agregar a persona que va a Evaluar -->
 
-    <div class="mb-3 row">
+    <div class="mb-3 row" *ngIf="miFormulario.controls['tipoEvaluacion'].value !== 'Auto Evaluacion'">
+       
         <label class="col-sm-3 col-form-label">Agregar</label>
         <div class="col-sm-9">
-            <div class="input-group">
+            <div class="input-group" >
                 <input  class="form-control"
                         [formControl] = "nuevoPersonasAEvaluar"
-                        placeholder="Agregar"
-                        (keyup.enter)=(agregarFavorito())>
+                        (keyup.enter)=(agregarFavorito())
+                        >
+                        
                 <button class="btn btn-outline-primary"
                         type="button"
                         (click)="agregarFavorito()"
@@ -54,8 +56,8 @@
         </div>
 
     </div>
-    <div class="=mb-3 row">
-        <label class="col-sm-3 col-form-label">Favoritos</label>
+    <div class="=mb-3 row" *ngIf="miFormulario.controls['tipoEvaluacion'].value !== 'Auto Evaluacion'">
+        <label class="col-sm-3 col-form-label">Personas a Evaluar</label>
         <div    class="col-sm-9"
                 formArrayName="personasAEvaluar">
 

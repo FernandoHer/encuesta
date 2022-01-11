@@ -24,9 +24,9 @@ export class SelectorComponent implements OnInit {
     }
   )
   
-  tipoEvaluacion:string[] =[];
-  personasAEvaluar:string[] =[];
-  nombreEvaluador:string[] =[];
+  tipoEvaluacion1:string[] =['Auto Evaluacion', 'Evaluar un Profesor', 'Evaluar un Directivo'];
+  personasAEvaluar1:string[] =['Juan Perez', 'Anita Corozo', 'Tamara Gomez', 'Katty Megrano', 'Mario Fuentes'];
+  nombreEvaluador1:string[] =['Carlos Perez','Juan Alvarez', 'Ricardo Zapata'];
   nuevoPersonasAEvaluar: FormControl =this.fb.control('',Validators.required);
 
   get personasAEvaluarArr(){
@@ -42,23 +42,21 @@ export class SelectorComponent implements OnInit {
   
 
   ngOnInit(): void {
-    this.tipoEvaluacion = [
-      'Auto Evaluacion', 'Evaluar un Profesor', 'Evaluar un Directivo'
-    ];
 
-    // Persona a Evaluar
-    this.nombreEvaluador =[
-      'Carlos Perez','Juan Alvarez', 'Ricardo Zapata'
-    ];
-
+    
+    // this.personasAEvaluarArr.push(this.fb.control(this.personasAEvaluar1,[Validators.required,Validators.minLength(3)]));
   
   }
+
+  campoNoEsValido(campo:string){
+    return this.miFormulario.controls[campo].errors
+          && this.miFormulario.controls[campo].touched
+  };
 
   agregarFavorito(){
     if(this.nuevoPersonasAEvaluar.invalid){
       return;
     }
-    // this.favoritosArr.push(new FormControl(this.nuevoFavorito.value,[Validators.required,Validators.minLength(3)]));
     this.personasAEvaluarArr.push(this.fb.control(this.nuevoPersonasAEvaluar.value,[Validators.required,Validators.minLength(3)]));
     this.nuevoPersonasAEvaluar.reset();
   }
@@ -67,9 +65,20 @@ export class SelectorComponent implements OnInit {
     console.log(this.miFormulario.controls['personasAEvaluar'].value[index]);
     this.personasAEvaluarArr.removeAt(index);
   };
+
+  sugerencias( termino:string){
+
+    console.log(termino); 
+
+   }
+
   
 
   guardar(){
+    if(this.miFormulario.get('tipoEvaluacion')?.value === 'Auto Evaluacion' ){
+      this.personasAEvaluarArr.clear()
+    }
+    
     console.log(this.miFormulario.value);
   }
 
