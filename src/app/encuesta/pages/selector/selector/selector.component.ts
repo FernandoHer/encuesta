@@ -14,12 +14,7 @@ export class SelectorComponent implements OnInit {
       tipoEvaluacion: ['',Validators.required],
       nombreEvaluador: ['',Validators.required],
       personasAEvaluar: this.fb.array ([
-      ['Juan Perez',[ Validators.required,Validators.minLength(3)]],
-      ['Anita Corozo',[ Validators.required,Validators.minLength(3)]],
-      ['Tamara Gomez',[ Validators.required,Validators.minLength(3)]],
-      ['Katty Megrano',[ Validators.required,Validators.minLength(3)]],
-      ['Mario Fuentes',[ Validators.required,Validators.minLength(3)]]
-        
+       
       ])
     }
   )
@@ -28,6 +23,7 @@ export class SelectorComponent implements OnInit {
   personasAEvaluar1:string[] =['Juan Perez', 'Anita Corozo', 'Tamara Gomez', 'Katty Megrano', 'Mario Fuentes'];
   nombreEvaluador1:string[] =['Carlos Perez','Juan Alvarez', 'Ricardo Zapata'];
   nuevoPersonasAEvaluar: FormControl =this.fb.control('',Validators.required);
+  optionList:string[] = [];
 
   get personasAEvaluarArr(){
     return this.miFormulario.get('personasAEvaluar') as FormArray;
@@ -53,11 +49,9 @@ export class SelectorComponent implements OnInit {
           && this.miFormulario.controls[campo].touched
   };
 
-  agregarFavorito(){
-    if(this.nuevoPersonasAEvaluar.invalid){
-      return;
-    }
-    this.personasAEvaluarArr.push(this.fb.control(this.nuevoPersonasAEvaluar.value,[Validators.required,Validators.minLength(3)]));
+  agregarFavorito(selectedOption:string){
+
+    this.personasAEvaluarArr.push(this.fb.control(selectedOption,[Validators.required,Validators.minLength(3)]));
     this.nuevoPersonasAEvaluar.reset();
   }
 
@@ -70,6 +64,16 @@ export class SelectorComponent implements OnInit {
 
     console.log(termino); 
 
+   }
+
+  setAndFilterOptionList(e: KeyboardEvent){
+    
+    let inputValue = this.nuevoPersonasAEvaluar.value;
+
+    this.optionList = this.personasAEvaluar1.filter((opt:string) => {
+      return opt.toLocaleLowerCase().indexOf(inputValue.toLocaleLowerCase()) > -1
+    })
+      
    }
 
   

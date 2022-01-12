@@ -42,37 +42,47 @@
             <div class="input-group" >
                 <input  class="form-control"
                         [formControl] = "nuevoPersonasAEvaluar"
-                        (keyup.enter)=(agregarFavorito())
+                        (keyup)="setAndFilterOptionList($event)"
                         >
-                        
-                <button class="btn btn-outline-primary"
-                        type="button"
-                        (click)="agregarFavorito()"
-                        >
-                        Agregar
-                </button>
 
             </div>
+            <ul>
+                <li *ngFor="let option of optionList">
+                    <button class="btn btn-link" type="button" (click)="agregarFavorito(option)">
+                        {{option}}
+                    </button>
+                </li>
+            </ul>
         </div>
 
     </div>
     <div class="=mb-3 row" *ngIf="miFormulario.controls['tipoEvaluacion'].value !== 'Auto Evaluacion'">
         <label class="col-sm-3 col-form-label">Personas a Evaluar</label>
-        <div    class="col-sm-9"
+        <!-- <div    class="col-sm-9"
                 formArrayName="personasAEvaluar">
+
+                
 
             <div    class="input-group mb-1"
                     *ngFor="let favorito of personasAEvaluarArr.controls; let i = index ">
                 <input  class="form-control mb-1"
-                        [formControlName]="i">
+                        [formControlName]="i" >
                 <button class="btn btn-outline-danger"
                         type="button"
                         (click)="borrar(i)">
                         Eliminar
                 </button>
-            </div>
+            </div> 
             
-        </div>
+        </div>-->
+        <ul>
+            <li *ngFor="let person of this.miFormulario.controls['personasAEvaluar'].value; let i = index">
+                {{person }}
+                <button class="btn btn-danger" type="button" (click)="borrar(i)">
+                    Eliminar
+                </button>
+            </li>
+        </ul>
 
     </div>
 
