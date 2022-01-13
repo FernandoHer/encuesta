@@ -21,7 +21,7 @@
 
     <!-- Selecciona la persona que va a realizar la evaluación-->
 
-    <div class="row mb-3">
+    <div class="row mb-3" *ngIf="miFormulario.controls['tipoEvaluacion'].value !== ''">
         <div class="col">
             <label class="form-label">Escoge la persona a ser evaluada</label>
             <select class="form-control"
@@ -35,7 +35,8 @@
 
     <!-- Agregar a persona que va a Evaluar -->
 
-    <div class="mb-3 row" *ngIf="miFormulario.controls['tipoEvaluacion'].value !== 'Auto Evaluacion'">
+    <div class="mb-3 row" *ngIf="campoNoEsValido('tipoEvaluacion') 
+                                && miFormulario.controls['nombreEvaluador'].value !== ''">
        
         <label class="col-sm-3 col-form-label">Agregar</label>
         <div class="col-sm-9">
@@ -43,12 +44,16 @@
                 <input  class="form-control"
                         [formControl] = "nuevoPersonasAEvaluar"
                         (keyup)="setAndFilterOptionList($event)"
+                        [value]="nuevoPersonasAEvaluar"
                         >
 
             </div>
-            <ul>
-                <li *ngFor="let option of optionList">
-                    <button class="btn btn-link" type="button" (click)="agregarFavorito(option)">
+            <ul >
+                <li *ngFor="let option of optionList"
+                    class="form-control">
+                    <button class="btn btn-link" 
+                            type="button" 
+                            (click)="agregarFavorito(option)">
                         {{option}}
                     </button>
                 </li>
@@ -56,29 +61,17 @@
         </div>
 
     </div>
-    <div class="=mb-3 row" *ngIf="miFormulario.controls['tipoEvaluacion'].value !== 'Auto Evaluacion'">
+    <div class="=mb-3 row" *ngIf="campoNoEsValido('tipoEvaluacion')
+                                && miFormulario.controls['nombreEvaluador'].value !== ''">
         <label class="col-sm-3 col-form-label">Personas a Evaluar</label>
-        <!-- <div    class="col-sm-9"
-                formArrayName="personasAEvaluar">
 
-                
-
-            <div    class="input-group mb-1"
-                    *ngFor="let favorito of personasAEvaluarArr.controls; let i = index ">
-                <input  class="form-control mb-1"
-                        [formControlName]="i" >
-                <button class="btn btn-outline-danger"
-                        type="button"
-                        (click)="borrar(i)">
-                        Eliminar
-                </button>
-            </div> 
-            
-        </div>-->
-        <ul>
-            <li *ngFor="let person of this.miFormulario.controls['personasAEvaluar'].value; let i = index">
+        <ul class="form-control">
+            <li class="form-control"
+                *ngFor="let person of this.miFormulario.controls['personasAEvaluar'].value; let i = index">
                 {{person }}
-                <button class="btn btn-danger" type="button" (click)="borrar(i)">
+                <button class="btn btn-danger" 
+                        type="button" 
+                        (click)="borrar(i)">
                     Eliminar
                 </button>
             </li>

@@ -13,9 +13,7 @@ export class SelectorComponent implements OnInit {
     {
       tipoEvaluacion: ['',Validators.required],
       nombreEvaluador: ['',Validators.required],
-      personasAEvaluar: this.fb.array ([
-       
-      ])
+      personasAEvaluar: this.fb.array ([ ])
     }
   )
   
@@ -45,8 +43,10 @@ export class SelectorComponent implements OnInit {
   }
 
   campoNoEsValido(campo:string){
-    return this.miFormulario.controls[campo].errors
-          && this.miFormulario.controls[campo].touched
+    return this.miFormulario.controls[campo].value !== 'Auto Evaluacion' 
+            && this.miFormulario.controls[campo].value !== ''
+    // return this.miFormulario.controls[campo].errors
+    //       && this.miFormulario.controls[campo].touched
   };
 
   agregarFavorito(selectedOption:string){
@@ -55,19 +55,15 @@ export class SelectorComponent implements OnInit {
     this.nuevoPersonasAEvaluar.reset();
   }
 
-  borrar(index:number){
+   borrar(index:number){
     console.log(this.miFormulario.controls['personasAEvaluar'].value[index]);
     this.personasAEvaluarArr.removeAt(index);
   };
 
-  sugerencias( termino:string){
-
-    console.log(termino); 
-
-   }
+  
 
   setAndFilterOptionList(e: KeyboardEvent){
-    
+
     let inputValue = this.nuevoPersonasAEvaluar.value;
 
     this.optionList = this.personasAEvaluar1.filter((opt:string) => {
@@ -79,11 +75,19 @@ export class SelectorComponent implements OnInit {
   
 
   guardar(){
+    if( this.miFormulario.invalid){ return };
     if(this.miFormulario.get('tipoEvaluacion')?.value === 'Auto Evaluacion' ){
-      this.personasAEvaluarArr.clear()
+      this.personasAEvaluarArr.clear();
+      this.personasAEvaluarArr.push(this.miFormulario.controls['nombreEvaluador']);
+      
     }
-    
-    console.log(this.miFormulario.value);
+    console.log (this.miFormulario.value);
+    this.miFormulario.setValue({
+      tipoEvaluacion: '',
+      nombreEvaluador: '',
+      personasAEvaluar: ['']
+    });
+      
   }
 
   
