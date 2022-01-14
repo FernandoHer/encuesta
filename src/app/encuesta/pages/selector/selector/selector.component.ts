@@ -17,11 +17,14 @@ export class SelectorComponent implements OnInit {
     }
   )
   
-  tipoEvaluacion1:string[] =['Auto Evaluacion', 'Evaluar un Profesor', 'Evaluar un Directivo'];
-  personasAEvaluar1:string[] =['Juan Perez', 'Anita Corozo', 'Tamara Gomez', 'Katty Megrano', 'Mario Fuentes'];
-  nombreEvaluador1:string[] =['Carlos Perez','Juan Alvarez', 'Ricardo Zapata'];
+  tipoEvaluacion1:string[] =['Auto Evaluacion', 'Evaluar un Profesor', 'Evaluar un Directivo','Option 4'];
+  teacher1:string[] =['Juan Perez', 'Anita Corozo', 'Tamara Gomez', 'Katty Megrano', 'Mario Fuentes'];
+  teacher2:string[] =['Andrea Tipán', 'Francisco Peralta', 'Gualberto Intriago','Karla Keiloz', 'Lucia Loma' ];
+  teacher3:string[] =['Daniel Duran', 'Ernesto Eguiguren', 'Humberto Haro', 'Ignacio Intriago', 'Jadira Jaen'];
+  nombreEvaluador1:string[] =['Maria Montes','Sandra Zuleta','Carlos Perez','Juan Alvarez', 'Ricardo Zapata'];
   nuevoPersonasAEvaluar: FormControl =this.fb.control('',Validators.required);
   optionList:string[] = [];
+  listPersons:string[] = [];
 
   get personasAEvaluarArr(){
     return this.miFormulario.get('personasAEvaluar') as FormArray;
@@ -51,6 +54,9 @@ export class SelectorComponent implements OnInit {
 
   agregarFavorito(selectedOption:string){
 
+    if(this.personasAEvaluarArr.value.includes(selectedOption)){
+      return console.log('Lo siento esta persona ya fue seleccionada')
+    }
     this.personasAEvaluarArr.push(this.fb.control(selectedOption,[Validators.required,Validators.minLength(3)]));
     this.nuevoPersonasAEvaluar.reset();
   }
@@ -65,9 +71,18 @@ export class SelectorComponent implements OnInit {
   setAndFilterOptionList(e: KeyboardEvent){
 
     let inputValue = this.nuevoPersonasAEvaluar.value;
+    this.listPersons = [];
+    
+    if(this.miFormulario.get('tipoEvaluacion')?.value === 'Evaluar un Profesor' ){
+        this.listPersons = this.teacher1;
+      } else if(this.miFormulario.get('tipoEvaluacion')?.value === 'Evaluar un Directivo' ){
+            this.listPersons = this.teacher2;
+              } else if(this.miFormulario.get('tipoEvaluacion')?.value === 'Option 4' ){
+                  this.listPersons = this.teacher3;
+                } 
 
-    this.optionList = this.personasAEvaluar1.filter((opt:string) => {
-      return opt.toLocaleLowerCase().indexOf(inputValue.toLocaleLowerCase()) > -1
+    this.optionList = this.listPersons.filter((opt:string) => {
+          return opt.toLocaleLowerCase().indexOf(inputValue.toLocaleLowerCase()) > -1
     })
       
    }
@@ -82,11 +97,14 @@ export class SelectorComponent implements OnInit {
       
     }
     console.log (this.miFormulario.value);
+    this.personasAEvaluarArr.clear();
     this.miFormulario.setValue({
       tipoEvaluacion: '',
       nombreEvaluador: '',
-      personasAEvaluar: ['']
+      personasAEvaluar: []
     });
+    this.listPersons=[];
+    this.optionList=[];
       
   }
 
