@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EncuestaService } from '../../../services/encuesta.service';
 
 @Component({
   selector: 'app-selector',
@@ -17,14 +18,16 @@ export class SelectorComponent implements OnInit {
     }
   )
   
-  tipoEvaluacion1:string[] =['Auto Evaluacion', 'Evaluar un Profesor', 'Evaluar un Directivo','Option 4'];
-  teacher1:string[] =['Juan Perez', 'Anita Corozo', 'Tamara Gomez', 'Katty Megrano', 'Mario Fuentes'];
-  teacher2:string[] =['Andrea Tipán', 'Francisco Peralta', 'Gualberto Intriago','Karla Keiloz', 'Lucia Loma' ];
-  teacher3:string[] =['Daniel Duran', 'Ernesto Eguiguren', 'Humberto Haro', 'Ignacio Intriago', 'Jadira Jaen'];
-  nombreEvaluador1:string[] =['Maria Montes','Sandra Zuleta','Carlos Perez','Juan Alvarez', 'Ricardo Zapata'];
+ 
+  teacher1:string[] =[];
+  teacher2:string[] =[];
+  teacher3:string[] =[];
+
   nuevoPersonasAEvaluar: FormControl =this.fb.control('',Validators.required);
   optionList:string[] = [];
   listPersons:string[] = [];
+  tipoEvaluacion1:string[] = [];
+  nombreEvaluador1:string[] = [];
 
   get personasAEvaluarArr(){
     return this.miFormulario.get('personasAEvaluar') as FormArray;
@@ -34,15 +37,17 @@ export class SelectorComponent implements OnInit {
   index:number = 0
 
 
-  constructor(private fb:FormBuilder) { }
+  constructor(private fb:FormBuilder,
+              private encuestaService: EncuestaService) { }
 
   
 
   ngOnInit(): void {
-
-    
-    // this.personasAEvaluarArr.push(this.fb.control(this.personasAEvaluar1,[Validators.required,Validators.minLength(3)]));
-  
+    this.encuestaService.getData('tipoEvaluacion1').subscribe(tipo => this.tipoEvaluacion1 = tipo);
+    this.encuestaService.getData('nombreEvaluador1').subscribe(nombre => this.nombreEvaluador1 = nombre);
+    this.encuestaService.getData('teacher1').subscribe(teach =>this.teacher1 = teach);
+    this.encuestaService.getData('teacher2').subscribe(teach =>this.teacher2 = teach);
+    this.encuestaService.getData('teacher3').subscribe(teach =>this.teacher3 = teach);
   }
 
   campoNoEsValido(campo:string){
@@ -71,14 +76,14 @@ export class SelectorComponent implements OnInit {
   setAndFilterOptionList(e: KeyboardEvent){
 
     let inputValue = this.nuevoPersonasAEvaluar.value;
-    this.listPersons = [];
+    // this.listPersons = [];
     
     if(this.miFormulario.get('tipoEvaluacion')?.value === 'Evaluar un Profesor' ){
-        this.listPersons = this.teacher1;
+        this.listPersons = this.teacher1
       } else if(this.miFormulario.get('tipoEvaluacion')?.value === 'Evaluar un Directivo' ){
-            this.listPersons = this.teacher2;
+          this.listPersons = this.teacher2;
               } else if(this.miFormulario.get('tipoEvaluacion')?.value === 'Option 4' ){
-                  this.listPersons = this.teacher3;
+                this.listPersons = this.teacher3;
                 } 
 
     this.optionList = this.listPersons.filter((opt:string) => {
